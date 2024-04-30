@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-
+import 'package:food_io/views/home_page.dart';
 
 void main() => runApp(MealIO());
 
