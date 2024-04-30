@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "foodio-421918",
+  "private_key_id": "294b200bcba18b4b0bebb0fe7c53e19fced1e50d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhOfEkE2LyrTm\ndcnCAS5eyb9l8W9wLj4VjKA0aRsa41LU72j8UBSNUKI7jyjVdub2GEktPmTUyt5X\nlXI1nB760CErBiumbMHmJqTT7OJ6cOh+UnW97+KPCYUkgxYLj3Xs8Q6K4ho7HE6V\nur+wHWhx6Pr5/IFq7VeofmURpB8KNx/6Tzalx9ZgDAObooA38CUV//GeFTS1HmsD\n+6n7zfJUox3BSIcub7XY4EtnzBRxwTw3rMmIKoOlBxMKQzk51SCeyShMbV4BAZxL\nONYhWA/MnS/L0AYyGrhMRFO8XaJQIsrMkqxcHossXXoxdDA1MuYLXyoDAeD7h5Of\nfmL8wL4DAgMBAAECggEAUaiMEKKfU45SeV5s9x24bQ+SS5nmWf3+6ah9GzoQRUvQ\nWuHIPLVkk99w3GzDY05hwuHLL5RpI05gkzB8shwhD2/rFnoJEvv3u2wqn+fqIU4I\nw6VYv5xFz1DCSpiCR6HrP2trdQtiaS74JC29kiveXapft6T/bZcmv5M3AC5KnEcx\nifYGi1ZWYsykNVTEM+EvYi8eMHMq1yaIVJLtNBV9yqrQFvJ7ldsdfPBKR4x+8Yrp\nblFLTjhqZc/DnJ3I4l17qJskLJ/YyTrfFmFgY5wibTeGMFGxBIZngcr/P4DeEVy1\n3QkQOseJrC9KeoCIdJA/9rE48B4tM+BMBR0ypI2eqQKBgQDkqHbs2Bpo8uV8GWD/\n2NfGqmTUun8w+dt6IT29N+g+V6RVHbk/QxZ6U6AJItWDbI9KBJjUNbp1g8/JtS6B\ndNiUSNdc1i6dIUxPnrduXmBOeivTO5Cj9r+2W2Wvo4b5RnapXFjTgphdLlSzIJKB\n6AlWmaJbrq/EZ9CS9bt9gOPe9wKBgQDI/DtdoyUYgQnsrXfSK3kJCngZQp68poue\n8YkslkH3sLME1sDIbWhnTrA4TzFVrBWkYwYiwPOpMOvGBMSRKLn2BUAHNxwxrYAb\nMN5DYqWJ6+aTmgea/jEx8WXVJxnrt5zeameBEf9CM3CaQixf7oFuVxkDLp71NAMf\nXBPX+lp6VQKBgQCRFviHZsSzTVUifrQXBBA+5kYe2cv1VsXWZBtZ4ozCajhDLh4q\nrzYnHsMQqQLUZuExNWOIXCNZh+8kbYv55xu6U9Ib/WgMmmFisDJynP39LfZ7DXPF\nJsAVRT9ryJbPu891vbw7UcW+crSaCRQNzB+IzOnBxUGQndMyPSzgARYWlwKBgCPT\nYjmktR4TElPP8AXUnfSQmyvVhjoWbdjdMRhziDrAkoiQRzjy16NikWLYKvEchZcR\n16wmPMix4bUgcHF3kv5ZnTosBqiMRsOSCGx2jw9wr18sG6LzII3Ie+Bs4d/0kM/M\no7qMHLYOOUol9Yb8GrIycFDy5H7M0KmsXhUnmS0pAoGAD0sNigOtpt1UTXSEexds\ndNm67mXjc+ldszHk90jvt7LfXD8qmn5+IzoiaqSE0zZ/nLE9Jg13zSuBs6htPAmn\nbklmNOpjtgvBx8c6tATA21Ci2gHpMvOPhOxtTXOYyU1QM1ukRWFlovnmpc0B3LZj\nfxrWTpPLda1M82s1NNsXobE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "foodioocr@foodio-421918.iam.gserviceaccount.com",
+  "client_id": "104405354225279760113",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/foodioocr%40foodio-421918.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

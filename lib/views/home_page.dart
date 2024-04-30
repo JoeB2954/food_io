@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:food_io/main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
+import 'package:googleapis_auth/auth_io.dart';
 
 class MealIOState extends State<MealIO> {
   
@@ -53,4 +55,5 @@ class MealIOState extends State<MealIO> {
       _image = File(returnedImage.path);
     });
   }
+
 }
