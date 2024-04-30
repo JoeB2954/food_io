@@ -2,19 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-class MealIO extends StatefulWidget{
-  const MealIO({Key? key}) : super(key : key);
-
-  
-  @override
-  State<StatefulWidget> createState(){
-  
-    return MealIOState();
-  }
-}
 
 class MealIOState extends State<MealIO> {
   
+  // ignore: unused_field
   File ? _image;
 
   

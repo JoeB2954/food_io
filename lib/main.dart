@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
-void main() => runApp(const MealIO());
 
-class MealIO extends StatelessWidget {
-  const MealIO({Key? key}) : super(key: key);
+void main() => runApp(MealIO());
+
+class MealIO extends StatefulWidget{
+
+  
   @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-    title: 'Meal.IO',
-    theme: ThemeData(primarySwatch: Colors.blue,),
-    home: const MealIO(),
-    );
+  State<StatefulWidget> createState(){
+  
+    return MealIOState();
   }
 }
