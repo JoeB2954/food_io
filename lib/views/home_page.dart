@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_io/main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart'; 
 
 class MealIOState extends State<MealIO> {
   
@@ -117,4 +115,12 @@ class MealIOState extends State<MealIO> {
       _image = File(returnedImage.path);
     });
   }
+
+  Future getImageTotext(final imagePath) async { 
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin); 
+    final RecognizedText recognizedText = 
+        await textRecognizer.processImage(InputImage.fromFilePath(imagePath)); 
+    String text = recognizedText.text.toString(); 
+    return text; 
+  } 
 }
