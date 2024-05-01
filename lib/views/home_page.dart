@@ -15,30 +15,92 @@ class MealIOState extends State<MealIO> {
 
   @override
   Widget build(BuildContext context){
+    
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text ('Meal.IO'),
-        ),
-        body: Center(
-           child: Column(
-            children: <Widget>[
-              IconButton( icon: const Icon(Icons.insert_drive_file),
-              onPressed: () {
-                _pickImageFromGallery();
-              },
-              ),
-              const SizedBox(height: 10.0,),
-              IconButton( icon: const Icon(Icons.camera_alt),
-              onPressed: () {
-                _pickImageFromCamera();
-              },
-              ),
-              
+          backgroundColor: const Color.fromARGB(255, 3, 169, 244),
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Icon(Icons.restaurant_menu),
+            SizedBox(width: 10),
+            Text('Meal.IO')
             ],
-           ),
           ),
         ),
+        
+        body: Container(
+          margin: const EdgeInsets.all(24),
+          padding: const EdgeInsets.only(bottom: 24),
+          
+          child: Stack(
+            
+             
+            children: <Widget>[
+              const Align(
+                alignment:  Alignment(0.00,-0.40),
+                child: 
+                  Text('Take a photo of your receipt or choose a photo from your photo library', 
+                  style: TextStyle( color: Color.fromARGB(255, 3, 169, 244), fontSize: 10 )),
+                ),
+              
+              
+              const Align(
+                alignment:  Alignment.center,
+                child: 
+                  Icon(Icons.crop_free_rounded, color: Color.fromARGB(255, 3, 169, 244), size: 300),
+                ),
+              Container(
+                margin: const EdgeInsets.all(24),
+                
+              
+                
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                
+                
+                children: <Widget>[
+              
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton (
+                  style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(15),
+                  ),
+                onPressed: () {
+                  _pickImageFromGallery();
+                } ,
+              
+              
+                child: const Icon(Icons.perm_media_rounded, color: Color.fromARGB(255, 3, 169, 244),)
+                    ),
+              ),
+                        
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton (
+                style: ElevatedButton.styleFrom(
+                shape: const CircleBorder( ),
+                padding: const EdgeInsets.all(15),
+                ),
+              onPressed: () {
+                _pickImageFromCamera();
+              } ,
+              
+              
+              child: const Icon(Icons.camera_alt, color: Color.fromARGB(255, 3, 169, 244),)
+                    ),
+                  ),
+                ],
+              ),
+              ),
+            ],
+          
+          ),
+        ),
+      ),
     );
   }
   Future _pickImageFromGallery() async {
@@ -55,5 +117,4 @@ class MealIOState extends State<MealIO> {
       _image = File(returnedImage.path);
     });
   }
-
 }
