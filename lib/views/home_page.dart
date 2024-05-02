@@ -8,7 +8,7 @@ class MealIOState extends State<MealIO> {
   
   // ignore: unused_field
   File ? _image;
-
+  late String _text = "";
   
 
   @override
@@ -68,7 +68,9 @@ class MealIOState extends State<MealIO> {
                   padding: const EdgeInsets.all(15),
                   ),
                 onPressed: () {
-                  _pickImageFromGallery();
+                  _pickImageFromGallery()  ;
+                  
+                 
                 } ,
               
               
@@ -84,43 +86,49 @@ class MealIOState extends State<MealIO> {
                 padding: const EdgeInsets.all(15),
                 ),
               onPressed: () {
-                _pickImageFromCamera();
+                 _pickImageFromCamera() ;
+                
               } ,
               
               
               child: const Icon(Icons.camera_alt, color: Color.fromARGB(255, 3, 169, 244),)
                     ),
                   ),
+                  
                 ],
+                
               ),
               ),
+              
             ],
-          
+
           ),
+          
         ),
       ),
     );
   }
+
+
+
+
   Future _pickImageFromGallery() async {
     final returnedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returnedImage == null) return;
-    setState(() {
-      _image = File(returnedImage.path);
-    });
+    getImageTotext(returnedImage.path);
   }
   Future _pickImageFromCamera() async {
+    
     final returnedImage = await ImagePicker().pickImage(source: ImageSource.camera);
     if (returnedImage == null) return;
-    setState(() {
-      _image = File(returnedImage.path);
-    });
+    getImageTotext(returnedImage.path);
   }
-
   Future getImageTotext(final imagePath) async { 
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin); 
     final RecognizedText recognizedText = 
         await textRecognizer.processImage(InputImage.fromFilePath(imagePath)); 
     String text = recognizedText.text.toString(); 
+    print(text);
     return text; 
   } 
 }
