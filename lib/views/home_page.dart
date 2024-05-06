@@ -3,6 +3,11 @@ import 'package:food_io/main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart'; 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+// ignore: unused_import
+import 'package:googleapis/language/v1.dart';
+
 
 class MealIOState extends State<MealIO> {
   
@@ -127,8 +132,44 @@ class MealIOState extends State<MealIO> {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin); 
     final RecognizedText recognizedText = 
         await textRecognizer.processImage(InputImage.fromFilePath(imagePath)); 
-    String text = recognizedText.text.toString(); 
-    print(text);
-    return text; 
+    String text = ""; 
+    for (TextBlock block in recognizedText.blocks) {
+    text += block.text + " "; // Add a space between blocks
+  }
+    text = text.trim();
+    extractFoodItems(text);
   } 
+
+  Future<List<String>> extractFoodItems(String text) async {
+  const apiKey = 'AIzaSyAqkEsNuGGXRliOKh5PKOUzMkVKp2AmXi4'; // Replace with your Google Cloud API key
+  const apiUrl =
+      'https://language.googleapis.com/v1/documents:analyzeEntities?key=$apiKey';
+
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({
+      'document': {
+        'type': 'PLAIN_TEXT',
+        'content': text,
+      },
+      'encodingType': 'UTF8',
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    final List<String> foodItems = [];
+
+    for (final entity in responseData['entities']) {
+      if (entity['type'] == 'CONSUMER_GOOD') {
+        foodItems.add(entity['name']);
+      }
+    }
+    print(foodItems);
+    return foodItems;
+  } else {
+    throw Exception('Failed to analyze text: ${response.reasonPhrase}');
+  }
+}
 }
