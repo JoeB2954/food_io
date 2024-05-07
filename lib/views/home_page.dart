@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:food_io/consts.dart';
 import 'package:food_io/main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart'; 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-// ignore: unused_import
-import 'package:googleapis/language/v1.dart';
-
+import 'package:chat_gpt_sdk/chat_gpt_sdk.dart'; // Imported chat gpt
 
 class MealIOState extends State<MealIO> {
   
@@ -132,44 +130,81 @@ class MealIOState extends State<MealIO> {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin); 
     final RecognizedText recognizedText = 
         await textRecognizer.processImage(InputImage.fromFilePath(imagePath)); 
-    String text = ""; 
-    for (TextBlock block in recognizedText.blocks) {
-    text += block.text + " "; // Add a space between blocks
-  }
-    text = text.trim();
-    extractFoodItems(text);
+
+    
+    String text = recognizedText.text.toString(); 
+    
+    imageToTextGpt(text);
+  
   } 
 
-  Future<List<String>> extractFoodItems(String text) async {
-  const apiKey = 'AIzaSyAqkEsNuGGXRliOKh5PKOUzMkVKp2AmXi4'; // Replace with your Google Cloud API key
-  const apiUrl =
-      'https://language.googleapis.com/v1/documents:analyzeEntities?key=$apiKey';
 
-  final response = await http.post(
-    Uri.parse(apiUrl),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'document': {
-        'type': 'PLAIN_TEXT',
-        'content': text,
-      },
-      'encodingType': 'UTF8',
-    }),
-  );
+  Future<void> imageToTextGpt(String text) async {
+    
+    //instance setup for chat gpt api
+    final _openAI = OpenAI.instance.build(token: OPENAI_API_KEY, 
+    baseOption: HttpSetup(
+      receiveTimeout: const Duration(
+        seconds: 5,),
+        ),
+        enableLog: true,
+        );
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    final List<String> foodItems = [];
+    //request for chatgpt
+    final request = CompleteText(
+        prompt:"Identify the ingredients of this shopping receipt text, then autocorrect the misspelled/incomplete ingredients and only output the ingredients as a simple list with commas between them. Respond with only the list. \"$text\"",
+        maxTokens: 200,
+        model: Gpt3TurboInstruct());
 
-    for (final entity in responseData['entities']) {
-      if (entity['type'] == 'CONSUMER_GOOD') {
-        foodItems.add(entity['name']);
-      }
+    //gets response from api
+    CompleteResponse? response = await _openAI.onCompletion(request: request);
+    debugPrint("$response");
+    
+    
+    String gpt_output = "";
+    for(var element in response!.choices)
+    {
+      gpt_output = gpt_output + element.text;
     }
-    print(foodItems);
-    return foodItems;
-  } else {
-    throw Exception('Failed to analyze text: ${response.reasonPhrase}');
+
+    //ouputs ingredients list as a String
+    print ("gptout = "+ gpt_output);
+
+    //ouputs ingredients list as a list 
+    List<String> Ingredients = Finished_Ingredients_List(gpt_output);
+    //print("final output = " + Ingredients.toString());
+  
+}
+
+List<String> Finished_Ingredients_List(String txt)
+{
+  //adding ingredients to list
+  String ingredient = "";
+  List<String> ingredient_list = [];
+
+  for (int i = 0; i < txt.length ; i++) {
+  
+    //if there is a comma put an ingredient in the list
+    if(txt[i] == ',')
+    { 
+      ingredient_list.add(ingredient);
+      ingredient = "";
+    }
+    else
+    {
+      //adds current letter to the current ingredient
+      ingredient += txt[i];
+    }
+    
+    //adds last letter of the word to the ingredient
+    if(i == txt.length - 1)
+    {
+      ingredient_list.add(ingredient);
+      ingredient = "";
+    }
+   
   }
+
+  return ingredient_list;
 }
 }
