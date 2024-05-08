@@ -1,6 +1,9 @@
 import 'package:food_io/models/recipe.dart';
 import 'package:food_io/views/widgets/recipe_card.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 class recipePage extends StatelessWidget {
 
   late final List<Recipe> _recipes;

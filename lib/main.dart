@@ -4,16 +4,21 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 
 void main() => runApp(const MealIO());
 
-class MealIO extends StatefulWidget{
+class MealIO extends StatelessWidget {
   const MealIO({super.key});
 
-
-  
   @override
-  State<StatefulWidget> createState(){
-  
-    return MealIOState();
+  Widget build(BuildContext context) {
+      return MaterialApp(
+      home: MyHomePage(),
+
+      routes: {
+        //'/':(context) => MyHomePage(),
+        '/recipes':(context) => MyRecipeFinder(),
+      },
+    );
   }
+  
 }
 
 
