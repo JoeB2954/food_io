@@ -10,11 +10,12 @@ class MealIO extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       return MaterialApp(
-      home: MyHomePage(),
+      //home: MyHomePage(),
 
       routes: {
-        //'/':(context) => MyHomePage(),
+        '/':(context) => MyHomePage(),
         '/recipes':(context) => MyRecipeFinder(),
+        //'/recipeinfo':(context) => MyRecipeInfo()
       },
     );
   }

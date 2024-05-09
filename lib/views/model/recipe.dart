@@ -11,3 +11,11 @@ class Recipe{
     required this.id,
   });
 }
+/*
+class Recipe_info{
+  final String summary;
+  Recipe_info({
+    required this.summary,
+  });
+}
+*/

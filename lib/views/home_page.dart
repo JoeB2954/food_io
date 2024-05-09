@@ -1,7 +1,12 @@
+
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_io/consts.dart';
 import 'package:food_io/main.dart';
+import 'package:googleapis/realtimebidding/v1.dart';
+
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart'; 
@@ -12,7 +17,12 @@ import 'model/recipe.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
+
+//global variable to transfer between pages
 List<String> final_ingredients = [];
+int current_meal_id = 0;
+String current_meal_image = "";
 
 
 class MyHomePage extends StatelessWidget {
@@ -80,7 +90,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 onPressed: () async {
                   await _pickImageFromGallery();
-                  //Navigator.push(context,MaterialPageRoute(builder: (context) => MyRecipeFinder()));
+                  //takes you to the recipes page
                   Navigator.pushNamed(context, '/recipes');
                 } ,
               
@@ -98,7 +108,7 @@ class MyHomePage extends StatelessWidget {
                 ),
               onPressed: () {
                  _pickImageFromCamera() ;
-                
+                Navigator.pushNamed(context, '/recipes');
               } ,
               
               
@@ -138,12 +148,8 @@ class MyHomePage extends StatelessWidget {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin); 
     final RecognizedText recognizedText = 
         await textRecognizer.processImage(InputImage.fromFilePath(imagePath)); 
-
-    
     String text = recognizedText.text.toString(); 
-    
     await imageToTextGpt(text);
-  
   } 
 
 
@@ -180,14 +186,7 @@ class MyHomePage extends StatelessWidget {
 
     //ouputs ingredients list as a list 
     List<String> Ingredients = Finished_Ingredients_List(gpt_output);
-    //print("final output = " + Ingredients.toString());
     final_ingredients = Ingredients;
-    
-    
-    //Navigator.pushNamed('/recipes');
-    //Navigator.push(context,MaterialPageRoute(builder: (context) => MyRecipeFinder()));
-    //NavigationState
-  
 }
 
 List<String> Finished_Ingredients_List(String txt)
@@ -233,12 +232,12 @@ class MyRecipeFinder extends StatelessWidget {
   List<Recipe> recipes = [];
 
   Future getRecipes() async {
-  print("page 2 = " + final_ingredients.toString());
+
   String Api_ingredients = "";
   
+  //formats ingredient list for use in url
   for(int i = 0;i < final_ingredients.length; i++)
   {
-    print("food = "+final_ingredients[i]);
     if(i == 0)
     {
       Api_ingredients += final_ingredients[i];
@@ -246,17 +245,17 @@ class MyRecipeFinder extends StatelessWidget {
     else{
       Api_ingredients += "," + "+"+final_ingredients[i] ;
     }
-    
-
   }
   
-  print("api url ingredient shit = "+Api_ingredients);
+
   String url = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=$SPOONACULAR_API_KEY&ingredients=$Api_ingredients&number=3";
   final uri = Uri.parse(url);
+  
+  //getting the json file from spoonacular
   var response = await http.get(uri);
-
   final jsonData = jsonDecode(response.body);
 
+  //makes recipe objects from recipes recieved 
   for(var eachRecipe in jsonData)
   {
     final recipe = Recipe(
@@ -267,41 +266,49 @@ class MyRecipeFinder extends StatelessWidget {
 
     recipes.add(recipe);
   }
-
-  print(recipes.length);
   }
 
-
+  //ui elements 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        '/recipeinfo':(context) => MyRecipeInfo()
+      },
+      
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: Text('Recipes'),
         
         ),
-
+        //waits for data before building
         body: FutureBuilder(future: getRecipes(),
         builder: (context,snapshot){
+  
           // is it done loading
           if(snapshot.connectionState == ConnectionState.done){
             return ListView.builder(
               itemCount: recipes.length,
               itemBuilder: (context, index){
                 return Padding(padding: const EdgeInsets.all(8),
-                  
-                  
                   child: Container(
                   decoration: BoxDecoration(color: Colors.grey[200]),
                   height: 400,
                   width: 500,
                   child: Column(
-                  children: [
+                  children:<Widget> [
                   FadeInImage.assetNetwork(placeholder: 'images/my_loading.gif', image: recipes[index].image,alignment: Alignment.topCenter,),
 
                   Text(recipes[index].title),
-                  Text("missing ingredients = "+recipes[index].missedIngredientCount.toString())
+                  Text("missing ingredients = "+recipes[index].missedIngredientCount.toString()),
+                  ElevatedButton(
+                    onPressed: () {
+                      current_meal_id = recipes[index].id;
+                      current_meal_image = recipes[index].image;
+
+                      Navigator.pushNamed(context, '/recipeinfo');
+                    }, child: Text("more info"))
                   ],
                 )));
               });
@@ -312,7 +319,7 @@ class MyRecipeFinder extends StatelessWidget {
             );
           }
         }),
-
+        /*
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -320,6 +327,72 @@ class MyRecipeFinder extends StatelessWidget {
             getRecipes();
         },
         )
+        */
+      ),
+    );
+  }
+}
+
+//page 3
+
+class MyRecipeInfo extends StatelessWidget {
+  MyRecipeInfo({super.key});
+
+  String summary = "";
+
+  Future getRecipeinfo() async {
+
+  String url = "https://api.spoonacular.com/recipes/$current_meal_id/summary?apiKey=$SPOONACULAR_API_KEY";
+  final uri = Uri.parse(url);
+  
+  //getting the json file from spoonacular
+  var response = await http.get(uri);
+  final jsonData = jsonDecode(response.body);
+
+  //makes recipe objects from recipes recieved 
+  summary = jsonData['summary'];
+  }
+
+  //ui elements 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: Text('Recipes'),
+        
+        ),
+        //waits for data before building
+        body: FutureBuilder(future: getRecipeinfo(),
+        builder: (context,snapshot){
+  
+          // is it done loading
+          if(snapshot.connectionState == ConnectionState.done){
+            return MaterialApp(
+              home: Scaffold(
+                appBar: AppBar(
+                backgroundColor: const Color.fromARGB(255, 3, 169, 244),
+                title: Text('More info'),),
+
+                body: Column(
+                  children: [
+                    FadeInImage.assetNetwork(placeholder: 'images/my_loading.gif', image: current_meal_image,alignment: Alignment.topCenter,),
+                    Text(summary),
+                    ],
+                  
+                ),
+              ),
+            );
+          }
+          // if it's still loading, show loading circle
+          else{
+            return Center(child: CircularProgressIndicator(),
+            );
+          }
+        }),
+ 
+        
       ),
     );
   }

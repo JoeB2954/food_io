@@ -1,2 +1,2 @@
-const OPENAI_API_KEY = "sk-proj-2AIvoB0OFWL8fj9QJQonT3BlbkFJCVdTwcKjY1pMhknqbPO3";
+const OPENAI_API_KEY = "sk-proj-mpktr05CFsJqs4TAeKlCT3BlbkFJsh1KtNDSUjTPeJiagE8K";
 const SPOONACULAR_API_KEY = "788ccfc816a44c729d512c6e265e4d35";
